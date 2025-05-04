@@ -17,7 +17,7 @@ namespace tl{
     };
 
     //--------------------------------------------------------------
-    // Вспомогательная структура для поиска типа по индексу
+    //Cтруктура для поиска типа по индексу
     template <size_t Index, typename... Types>
     struct TypeAt;    
 
@@ -73,14 +73,35 @@ namespace tl{
     template <typename T>
     struct IndexOf<T> {
         static_assert(sizeof(T) == 0, "Тип не найден в TypeList");
+    };   
+    //--------------------------------------------------------------
+
+    //--------------------------------------------------------------
+    // Структура для добавления типа в конец
+    template<typename... Types>
+    struct PushBack;
+
+    template<typename NT, typename... Types>
+    struct PushBack<NT, Types...>{
+        using type = TypeList<Types..., NT>;
+    };
+
+    // Структура для добавления типа в начало
+    template<typename... Types>
+    struct PushFront;
+
+    template<typename NT, typename... Types>
+    struct PushFront<NT, Types...>{
+        using type = TypeList<NT, Types...>;
+    };
     //--------------------------------------------------------------
 };
     
 
-}
+
 
 int main(int argc, char* argv []){
-    using list = tl::TypeList<int, float, char>;
+    using myList = tl::TypeList<int, float, char>;
     using t1 = tl::TypeAt<1, int, float, char>;
     using t2 = tl::Contains<int, int, float, char>;
     using ind1 = tl::IndexOf<float, int, float, char>;
@@ -89,6 +110,9 @@ int main(int argc, char* argv []){
     static_assert(t2::value, "Тип не содержится в TypeList");
     static_assert(ind1::index == 1, "Тип не найден");
     std::cout << "Ок!" << std::endl;
+
+    using newList = tl::PushBack<double, int, float, char>;
+    static_assert(std::is_same_v<tl::TypeAt<3, int, float, char, double>::type, double>, "Ошибка добавления типа");
 
     return 0;
 }
