@@ -34,6 +34,7 @@ namespace tl{
     };
     //--------------------------------------------------------------
 
+    //--------------------------------------------------------------
     //Структура для проверки наличия типа
     template <typename... Types>
     struct Contains;
@@ -49,6 +50,31 @@ namespace tl{
     //Специализация, когда первый тип НЕ совпадает с искомым 
     template <typename T1, typename T2, typename... Rest>
     struct Contains<T1, T2, Rest...>: Contains<T1, Rest...>{};     
+    //--------------------------------------------------------------
+
+    //--------------------------------------------------------------
+    //Структура для нахождения индекса конкретного типа
+    template<typename... Types>
+    struct IndexOf;
+
+    //Специализация, когда искомый индекс следующий
+    template<typename T, typename... Rest>
+    struct IndexOf<T, T, Rest...>{
+        static constexpr size_t index = 0; 
+    };
+
+    //Специализация, когда искомый индекс НЕ следующий
+    template<typename T1, typename T2, typename... Rest>
+    struct IndexOf<T1, T2, Rest...>{
+        static constexpr size_t index = 1 + IndexOf<T1, Rest...>::index; 
+    };
+
+    // Специализация для случая, когда тип не найден (вызовет ошибку компиляции)
+    template <typename T>
+    struct IndexOf<T> {
+        static_assert(sizeof(T) == 0, "Тип не найден в TypeList");
+    //--------------------------------------------------------------
+};
     
 
 }
@@ -57,9 +83,11 @@ int main(int argc, char* argv []){
     using list = tl::TypeList<int, float, char>;
     using t1 = tl::TypeAt<1, int, float, char>;
     using t2 = tl::Contains<int, int, float, char>;
+    using ind1 = tl::IndexOf<float, int, float, char>;
 
     static_assert(std::is_same_v<typename t1::type, float>, "Несовпадение типов");
     static_assert(t2::value, "Тип не содержится в TypeList");
+    static_assert(ind1::index == 1, "Тип не найден");
     std::cout << "Ок!" << std::endl;
 
     return 0;
