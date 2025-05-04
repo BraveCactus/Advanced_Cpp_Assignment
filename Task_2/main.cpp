@@ -82,7 +82,7 @@ namespace tl{
     struct PushBack;
 
     template<typename NT, typename... Types>
-    struct PushBack<NT, Types...>{
+    struct PushBack<NT, TypeList<Types...>>{
         using type = TypeList<Types..., NT>;
     };
 
@@ -92,7 +92,7 @@ namespace tl{
 
     template<typename NT, typename... Types>
     struct PushFront<NT, Types...>{
-        using type = TypeList<NT, Types...>;
+        using type = TypeList<NT, TypeList<Types...>>;
     };
     //--------------------------------------------------------------
 };
@@ -111,7 +111,7 @@ int main(int argc, char* argv []){
     static_assert(ind1::index == 1, "Тип не найден");
     std::cout << "Ок!" << std::endl;
 
-    using newList = tl::PushBack<double, int, float, char>;
+    using newList = tl::PushBack<double, myList>;
     static_assert(std::is_same_v<tl::TypeAt<3, int, float, char, double>::type, double>, "Ошибка добавления типа");
 
     return 0;
