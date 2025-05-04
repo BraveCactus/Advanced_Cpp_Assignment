@@ -1,4 +1,0 @@
-C:/Users/matve/Desktop/Task_1/build/CMakeFiles/my_library.dir
-C:/Users/matve/Desktop/Task_1/build/CMakeFiles/MyProject.dir
-C:/Users/matve/Desktop/Task_1/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/matve/Desktop/Task_1/build/CMakeFiles/ZERO_CHECK.dir
