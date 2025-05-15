@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <iostream>
 
+static const size_t MAX_EVENTS = 10;
+
 //Уровни важности сообщений 
 enum LogLevel{
     LOG_NORMAL,
@@ -16,17 +18,18 @@ enum LogLevel{
 struct Event{
     std::time_t time;
     LogLevel level;
-    std::string msg;
+    std::string message;
 };
 
 class Log{
 private:    
-    std::vector<Event> events;
-    static const size_t MAX_REMEMBERED_EVENTS = 10;
+    std::vector<Event> events;    
 
 public:
     // Получение единственного экземпляра логгера
     static Log* Instance();
+
+    Log() = default;
 
     void message(const LogLevel level, const std::string& msg);
 
