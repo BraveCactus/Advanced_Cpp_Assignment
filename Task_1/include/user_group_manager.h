@@ -30,4 +30,4 @@ public:
     void setGroupInfo(int groupId, const std::string& info);
 };
 
-#endif // USER_GROUP_MANAGER_H
+#endif 

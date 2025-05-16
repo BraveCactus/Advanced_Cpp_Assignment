@@ -18,9 +18,10 @@ public:
     User();
     User(const std::string& userName);
     User(const std::string& userName, int userID, const std::string& userInfo = "_");
+    ~User() override{}
     
     const std::shared_ptr<Group> getGroupLink() const;
     void printInfo();
 };
 
-#endif // USER_H
+#endif 

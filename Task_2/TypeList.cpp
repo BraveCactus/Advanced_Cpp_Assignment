@@ -2,7 +2,6 @@
 #include <vector>
 #include <type_traits> //Для false_type и true_type
 
-
 //std::true_type — тип, представляющий true (содержит статическое value = true).
 //std::false_type — тип, представляющий false (содержит статическое value = false).
 
@@ -26,7 +25,7 @@ namespace tl{
     
     // Специализация c TypeList
     template <size_t Index, typename... Types>
-    struct TypeAt<Index, TypeList<Types...>>{
+    struct TypeAt<Index, TypeList<Types...>>: TypeAt<Index, Types...>{
         using type = typename TypeAt<Index, Types...>::type;
     };
 
@@ -36,7 +35,7 @@ namespace tl{
         using type = T;
     };
 
-    //Рекурсивная специализация для индексов больших нуля
+    //Специализация для индексов больших нуля
     template <size_t Index, typename T, typename... Rest>
     struct TypeAt<Index, T, Rest...>{
         using type = typename TypeAt<Index - 1, Rest...>::type;
@@ -128,7 +127,7 @@ int main(int argc, char* argv []){
     std::cout << "Ок!" << std::endl;
 
     using newList = tl::PushBack<double, myList>;
-    static_assert(std::is_same_v<typename tl::TypeAt<3, int, float, char, double>::type, double>, "...");
+    static_assert(std::is_same_v<typename tl::TypeAt<3, int, float, char, double>::type, double>, "...");    
 
     return 0;
 }

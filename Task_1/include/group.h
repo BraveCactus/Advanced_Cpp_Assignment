@@ -23,4 +23,4 @@ public:
     void printInfo();
 };
 
-#endif // GROUP_H
+#endif 
