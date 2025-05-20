@@ -20,25 +20,30 @@ namespace tl{
 
     //--------------------------------------------------------------
     //Cтруктура для поиска типа по индексу
+    // Базовый шаблон TypeAtSup
     template <size_t Index, typename... Types>
-    struct TypeAt; 
+    struct TypeAtSup;
     
-    // Специализация c TypeList
-    template <size_t Index, typename... Types>
-    struct TypeAt<Index, TypeList<Types...>>: TypeAt<Index, Types...>{
-        using type = typename TypeAt<Index, Types...>::type;
-    };
-
-    //Специализация когда Index = 0
+    // Специализация для Index == 0
     template <typename T, typename... Rest>
-    struct TypeAt<0, T, Rest...>{
+    struct TypeAtSup<0, T, Rest...> {
         using type = T;
     };
-
-    //Специализация для индексов больших нуля
+    
+    // Рекурсивный случай
     template <size_t Index, typename T, typename... Rest>
-    struct TypeAt<Index, T, Rest...>{
-        using type = typename TypeAt<Index - 1, Rest...>::type;
+    struct TypeAtSup<Index, T, Rest...> {
+        using type = typename TypeAtSup<Index - 1, Rest...>::type;
+    };    
+
+    // Теперь интерфейс TypeAt
+    template <size_t Index, typename TList>
+    struct TypeAt;
+    
+    // Специализация для TypeList
+    template <size_t Index, typename... Types>
+    struct TypeAt<Index, TypeList<Types...>> {
+        using type = typename TypeAtSup<Index, Types...>::type;
     };
     //--------------------------------------------------------------
 
@@ -124,10 +129,10 @@ int main(int argc, char* argv []){
     static_assert(std::is_same_v<typename t1::type, float>, "Несовпадение типов");
     static_assert(t2::value, "Тип не содержится в TypeList");
     static_assert(ind1::index == 1, "Тип не найден");
-    std::cout << "Ок!" << std::endl;
+    
+    static_assert(std::is_same_v<typename tl::TypeAt<2, myList>::type, char>, "TypeAt не работает!");   
 
-    using newList = tl::PushBack<double, myList>;
-    static_assert(std::is_same_v<typename tl::TypeAt<3, int, float, char, double>::type, double>, "...");    
+    std::cout << "Ок!" << std::endl;
 
     return 0;
 }
