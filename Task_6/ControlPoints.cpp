@@ -46,7 +46,7 @@ public:
 // Абстрактный строитель
 class ControlPointBuilder {
 public:
-    virtual void processCheckpoint(const ControlPoint& cp, int index) = 0;
+    virtual void processControlPoint(const ControlPoint& cp, int index) = 0;
     virtual void showResult() = 0;
     virtual ~ControlPointBuilder() = default;
 };
@@ -54,7 +54,8 @@ public:
 // builder для вывода
 class PrintBuilder: public ControlPointBuilder{
 public:
-    void processCheckpoint(const ControlPoint& cp, int index) override{
+    // Вывод сведений о КП
+    void processControlPoint(const ControlPoint& cp, int index) override{
         std::cout << "Порядковый номер: " << index << std::endl;
         std::cout << "   Название: " << cp.getName() << std::endl;
         std::cout << "   Широта: " << cp.getLati() << " Долгота: " << cp.getLong() << std::endl;
@@ -75,7 +76,8 @@ class PenaltyCounter: public ControlPointBuilder{
 private:
     int totalPenalty = 0;
 public:
-    void processCheckpoint(const ControlPoint& cp, int index) override{
+    // Подсчет итогового штрафа
+    void processControlPoint(const ControlPoint& cp, int index) override{
         if (!cp.isObligatory())
         {
             totalPenalty += cp.getPenalty();
@@ -107,7 +109,7 @@ public:
 
     void process(ControlPointBuilder& builder) {
         for (size_t i = 0; i < cp_arr.size(); ++i) {
-            builder.processCheckpoint(*cp_arr[i], i + 1);
+            builder.processControlPoint(*cp_arr[i], i + 1);
         }
         builder.showResult();
     }
