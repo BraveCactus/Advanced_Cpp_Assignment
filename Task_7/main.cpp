@@ -120,8 +120,7 @@ public:
     size_t size() const {
         return impl->size();
     }
-
-    // Объединение множеств
+    
     Set unionWith(const Set& other) const {
         Set result;
         for (int elem : impl->getElements()) {
@@ -132,8 +131,7 @@ public:
         }
         return result;
     }
-
-    // Пересечение множеств
+    
     Set intersectionWith(const Set& other) const {
         Set result;
         for (int elem : impl->getElements()) {
@@ -151,6 +149,16 @@ public:
         }
         std::cout << "}" << std::endl;
     }
+
+    void who_I_am(){
+        if (dynamic_cast<VectorSetImpl*>(impl))
+        {
+            std::cout << "являюсь реализацией с вектором" << std::endl;
+        } else {
+            std::cout << "являюсь реализацией с хеш-таблицей" << std::endl;
+        }
+        
+    }
 };
 
 int main() {
@@ -161,23 +169,27 @@ int main() {
     }
     std::cout << "Добавили 1-5: ";
     mySet.print();
+    mySet.who_I_am();
     
     for (int i = 6; i <= 15; ++i) {
         mySet.add(i);
     }
     std::cout << "Добавили 6-15: ";
     mySet.print();
+    mySet.who_I_am();
     
     mySet.remove(10);
     mySet.remove(5);
     std::cout << "Убрали 5 и 10: ";
     mySet.print();
+    mySet.who_I_am();
     
     for (int i = 1; i <= 14; ++i) {
         mySet.remove(i);
     }
     std::cout << "Удалили все элементы кроме одного ";
     mySet.print();
+    mySet.who_I_am();
     
     Set setA;
     setA.add(1);
@@ -196,6 +208,8 @@ int main() {
     Set intersectionSet = setA.intersectionWith(setB);
     std::cout << "Пересечение: ";
     intersectionSet.print();
+
+    setA.who_I_am();
 
     return 0;
 }
